@@ -14,6 +14,7 @@ import AddIcon from "@mui/icons-material/Add";
 import LinkIcon from "@mui/icons-material/Link";
 
 import { useApp } from "../context/AppProvider";
+import { getDataFromLocalStorage } from "../utils/getDataFromLocalStorage";
 
 export const ProductCard = ({
   ASIN,
@@ -23,13 +24,34 @@ export const ProductCard = ({
   detailPageURL,
   rating,
   totalReviews,
-  subtitle,
-  isPrimeEligible,
 }) => {
-  const { basket, setBasket } = useApp();
+  const { setBasket } = useApp();
 
   const handleAddToBasket = () => {
-    setBasket([...basket, "1"]);
+    const basketFromLS = getDataFromLocalStorage("basket", []);
+
+    const itemIndex = basketFromLS.findIndex((item) => {
+      return item.id === ASIN;
+    });
+
+    if (itemIndex !== -1) {
+      basketFromLS[itemIndex].quantity += 1;
+    } else {
+      const product = {
+        id: ASIN,
+        title,
+        price,
+        priceValue: +price.slice(1),
+        imageUrl,
+        quantity: 1,
+      };
+
+      basketFromLS.push(product);
+    }
+
+    localStorage.setItem("basket", JSON.stringify(basketFromLS));
+
+    setBasket(basketFromLS);
   };
 
   return (
