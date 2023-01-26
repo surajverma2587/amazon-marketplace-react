@@ -6,9 +6,9 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 
-export const SearchForm = () => {
+export const SearchForm = ({ setSearchQuery }) => {
   const onSubmit = ({ searchTerm }) => {
-    console.log(searchTerm);
+    setSearchQuery(searchTerm);
   };
 
   const initialValues = {

@@ -1,9 +1,15 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
+import Backdrop from "@mui/material/Backdrop";
+import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import { Products } from "../components/Products";
 import { SearchForm } from "../components/SearchForm";
 
-const products = [
+const mockProducts = [
   {
     ASIN: "B09B96TG33",
     title:
@@ -137,11 +143,62 @@ const products = [
 ];
 
 export const Home = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [products, setProducts] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (searchQuery) {
+      setIsLoading(true);
+
+      const fetchData = async () => {
+        try {
+          const { data } = await axios.get(
+            process.env.REACT_APP_AMAZON_PRICE_API,
+            {
+              params: {
+                keywords: searchQuery,
+                marketplace: "GB",
+              },
+              headers: {
+                "X-RapidAPI-Key": process.env.REACT_APP_X_RAPID_API_KEY,
+                "X-RapidAPI-Host": process.env.REACT_APP_X_RAPID_API_HOST,
+              },
+            }
+          );
+
+          setError(false);
+          setIsLoading(false);
+          setProducts(data);
+          // setProducts(mockProducts);
+        } catch (error) {
+          setProducts();
+          setIsLoading(false);
+          setError(true);
+        }
+      };
+
+      fetchData();
+    }
+  }, [searchQuery]);
+
   return (
     <Container maxWidth="xl">
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Stack spacing={3}>
-        <SearchForm />
-        <Products products={products} />
+        <SearchForm setSearchQuery={setSearchQuery} />
+        {error && (
+          <Alert severity="error">
+            Failed to retrieve results for {searchQuery}
+          </Alert>
+        )}
+        {products && <Products products={products} />}
       </Stack>
     </Container>
   );
