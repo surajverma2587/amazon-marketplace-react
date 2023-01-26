@@ -12,9 +12,11 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Badge from "@mui/material/Badge";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useApp } from "../context/AppProvider";
 
 export const NavigationBar = () => {
   const navigate = useNavigate();
+  const { basket } = useApp();
   const [showNavMenu, setShowNavMenu] = useState(false);
 
   const handleOpenNavMenu = (event) => {
@@ -125,7 +127,7 @@ export const NavigationBar = () => {
               aria-label="show 4 new mails"
               color="inherit"
             >
-              <Badge badgeContent={3} color="error">
+              <Badge badgeContent={basket.length} color="error">
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>

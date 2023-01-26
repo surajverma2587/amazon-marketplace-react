@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -7,8 +8,12 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Rating from "@mui/material/Rating";
 import Stack from "@mui/material/Stack";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import AddIcon from "@mui/icons-material/Add";
 import LinkIcon from "@mui/icons-material/Link";
+
+import { useApp } from "../context/AppProvider";
 
 export const ProductCard = ({
   ASIN,
@@ -21,6 +26,12 @@ export const ProductCard = ({
   subtitle,
   isPrimeEligible,
 }) => {
+  const { basket, setBasket } = useApp();
+
+  const handleAddToBasket = () => {
+    setBasket([...basket, "1"]);
+  };
+
   return (
     <Card sx={{ maxWidth: 345, m: 2 }}>
       <CardHeader subheader={price} />
@@ -47,12 +58,29 @@ export const ProductCard = ({
       </Stack>
 
       <CardActions disableSpacing>
-        <IconButton>
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton href={detailPageURL} target="_blank">
-          <LinkIcon />
-        </IconButton>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <Box>
+            <IconButton>
+              <FavoriteBorderIcon />
+            </IconButton>
+            <IconButton href={detailPageURL} target="_blank">
+              <LinkIcon />
+            </IconButton>
+          </Box>
+
+          <Box>
+            <IconButton onClick={handleAddToBasket}>
+              <AddIcon />
+            </IconButton>
+          </Box>
+        </Box>
       </CardActions>
     </Card>
   );
