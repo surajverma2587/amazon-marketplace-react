@@ -154,24 +154,24 @@ export const Home = () => {
 
       const fetchData = async () => {
         try {
-          // const { data } = await axios.get(
-          //   process.env.REACT_APP_AMAZON_PRICE_API,
-          //   {
-          //     params: {
-          //       keywords: searchQuery,
-          //       marketplace: "GB",
-          //     },
-          //     headers: {
-          //       "X-RapidAPI-Key": process.env.REACT_APP_X_RAPID_API_KEY,
-          //       "X-RapidAPI-Host": process.env.REACT_APP_X_RAPID_API_HOST,
-          //     },
-          //   }
-          // );
+          const { data } = await axios.get(
+            process.env.REACT_APP_AMAZON_PRICE_API,
+            {
+              params: {
+                keywords: searchQuery,
+                marketplace: "GB",
+              },
+              headers: {
+                "X-RapidAPI-Key": process.env.REACT_APP_X_RAPID_API_KEY,
+                "X-RapidAPI-Host": process.env.REACT_APP_X_RAPID_API_HOST,
+              },
+            }
+          );
 
           setError(false);
           setIsLoading(false);
-          // setProducts(data);
-          setProducts(mockProducts);
+          setProducts(data);
+          // setProducts(mockProducts);
         } catch (error) {
           setProducts();
           setIsLoading(false);
