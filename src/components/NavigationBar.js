@@ -13,6 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Badge from "@mui/material/Badge";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useApp } from "../context/AppProvider";
+import { getBasketItemsTotal } from "../utils/getBasketItemsTotal";
 
 export const NavigationBar = () => {
   const navigate = useNavigate();
@@ -126,8 +127,12 @@ export const NavigationBar = () => {
               size="large"
               aria-label="show 4 new mails"
               color="inherit"
+              onClick={() => {
+                handleCloseNavMenu();
+                navigate("/checkout");
+              }}
             >
-              <Badge badgeContent={basket.length} color="error">
+              <Badge badgeContent={getBasketItemsTotal(basket)} color="error">
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
