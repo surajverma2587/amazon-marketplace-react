@@ -9,7 +9,7 @@ export const Basket = () => {
   return (
     <Box>
       {basket.map((item) => (
-        <BasketItem item={item} />
+        <BasketItem item={item} key={item.id} />
       ))}
 
       <h3>TOTAL: £534678</h3>
